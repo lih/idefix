@@ -7,8 +7,8 @@ function setup_env() {
     local cache=~/.nix-cache/nix-shell-idefix
     if [ ! -e "$cache" ]; then
         mkdir -p ~/.nix-cache
-	nix-instantiate --add-root "$cache.drv" --expr 'with import ./scripts/etc/env-bigfoot-nixpkgs.nix; bashInteractive'
-	nix-store --realise --add-root "$cache" "$cache.drv" 
+        nix-instantiate --add-root "$cache.drv" --expr 'with import ./scripts/etc/env-bigfoot-nixpkgs.nix; bashInteractive'
+        nix-store --realise --add-root "$cache" "$cache.drv"
     fi
 }
 
@@ -16,13 +16,21 @@ function set_gpu_options() {
     local model="$1"; shift
     case "$model" in
         V100)
-            IDEFIX_CMAKE_OPTIONS+=( -DKokkos_ENABLE_CUDA=ON -DKokkos_ARCH_VOLTA70=ON "-DCUDAToolkit_INCLUDE_DIR=$(in_env_raw 'echo $IDEFIX_CUDA_INCLUDE')" );;
+            GPU_FLAVOR=cuda
+            IDEFIX_CMAKE_OPTIONS+=( -DKokkos_ENABLE_CUDA=ON -DKokkos_ARCH_VOLTA70=ON "-DCUDAToolkit_INCLUDE_DIR=$(in_env_raw 'echo $IDEFIX_CUDA_INCLUDE')" )
+            ;;
         A100)
-            IDEFIX_CMAKE_OPTIONS+=( -DKokkos_ENABLE_CUDA=ON -DKokkos_ARCH_AMPERE80=ON "-DCUDAToolkit_INCLUDE_DIR=$(in_env_raw 'echo $IDEFIX_CUDA_INCLUDE')" );;
+            GPU_FLAVOR=cuda
+            IDEFIX_CMAKE_OPTIONS+=( -DKokkos_ENABLE_CUDA=ON -DKokkos_ARCH_AMPERE80=ON "-DCUDAToolkit_INCLUDE_DIR=$(in_env_raw 'echo $IDEFIX_CUDA_INCLUDE')" )
+            ;;
         H100)
-            IDEFIX_CMAKE_OPTIONS+=( -DKokkos_ENABLE_CUDA=ON -DKokkos_ARCH_HOPPER90=ON "-DCUDAToolkit_INCLUDE_DIR=$(in_env_raw 'echo $IDEFIX_CUDA_INCLUDE')" );;
+            GPU_FLAVOR=cuda
+            IDEFIX_CMAKE_OPTIONS+=( -DKokkos_ENABLE_CUDA=ON -DKokkos_ARCH_HOPPER90=ON "-DCUDAToolkit_INCLUDE_DIR=$(in_env_raw 'echo $IDEFIX_CUDA_INCLUDE')" )
+            ;;
         Mi200)
-            IDEFIX_CMAKE_OPTIONS+=( -DKokkos_ENABLE_HIP=ON -DCMAKE_CXX_COMPILER=hipcc -DKokkos_ARCH_VEGA90A=ON );;
+            GPU_FLAVOR=amd
+            IDEFIX_CMAKE_OPTIONS+=( -DKokkos_ENABLE_HIP=ON -DCMAKE_CXX_COMPILER=hipcc -DKokkos_ARCH_VEGA90A=ON )
+            ;;
         '') ;;
         *)
             printf "Error: unknown gpu architecture '%s'\n" "$model"
@@ -32,10 +40,10 @@ function set_gpu_options() {
 
 function in_env_raw() {
     local -a cmd="$1"
-    local drvfile="$IDEFIX_DIR/scripts/etc/env-bigfoot.drv"
+    local drvfile="$IDEFIX_DIR/scripts/etc/env-bigfoot-$GPU_FLAVOR.drv"
     if [ ! -e "$drvfile" ]; then
         printf "Cacheing an Idefix shell derivation in %s\n" "$drvfile" >&2
-        nix-instantiate --add-root "$drvfile" "$IDEFIX_DIR/scripts/etc/env-bigfoot.nix" >/dev/null
+        nix-instantiate --add-root "$drvfile" "$IDEFIX_DIR/scripts/etc/env-bigfoot-$GPU_FLAVOR.nix" >/dev/null
     fi
     printf "Running command: %s\n" "$cmd" >&2
     NIX_BUILD_SHELL="$HOME/.nix-cache/nix-shell/bin/bash" nix-shell "$drvfile" --run "$cmd"

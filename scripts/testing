@@ -5,6 +5,9 @@ declare action=( do_error 1 "Error: no action specified (expected 'compile' or '
 declare gpu_model=""
 declare -a IDEFIX_CMAKE_OPTIONS=( )
 declare -a IDEFIX_MAKE_OPTIONS=( )
+function clean_before() {
+    :
+}
 
 while (( $# > 0 )); do
     opt="$1"; shift
@@ -12,8 +15,13 @@ while (( $# > 0 )); do
         compile) action=( do_compile "$@" );   break;;
         repl)    action=( do_repl "$@" );      break;;
         run)     action=( do_run "$@" );       break;;
-        list)    action=( do_list "$@" ); break;;
-        --gpu)   gpu_model="$1"; shift;; 
+        list)    action=( do_list "$@" );      break;;
+        --gpu)   gpu_model="$1"; shift;;
+        --clean)
+            function clean_before() {
+                rm -rf CMakeCache* CMakeFiles* Makefile cmake*
+            }
+        ;;
         *)
             action=( do_error 2 "Error: unknown option '%s' (expected 'compile' or 'run', or a dashed option)\n" "$1"  )
             break
@@ -69,6 +77,7 @@ function do_compile() (
         (
             printf "Compiling test: %s (logs in %s)\n" "$test" "$PWD/$test.log" >&"$stdout"
             cd "idefix-build.d/$test"
+            clean_before
             in_env cmake "$IDEFIX_DIR" "${IDEFIX_CMAKE_OPTIONS[@]}"
             in_env make "${IDEFIX_MAKE_OPTIONS[@]}"
             printf "Finished test: %s\n" "$test" >&"$stdout"
@@ -90,7 +99,7 @@ function do_run() (
             cd "idefix-build.d/$test"
             in_env ./idefix
             printf "Finished test: %s\n" >&"$stdout"
-            
+
         ) >"$test-run.log" 2>&1 &
     done
     exec {stdout}>&-
