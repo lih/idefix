@@ -7,25 +7,26 @@ function setup_env() {
     local cache=~/.nix-cache/nix-shell-idefix
     if [ ! -e "$cache" ]; then
         mkdir -p ~/.nix-cache
-        nix-instantiate --add-root "$cache.drv" --expr 'with import ./scripts/etc/env-bigfoot-nixpkgs.nix; bashInteractive'
+        nix-instantiate --add-root "$cache.drv" --expr 'with import <nixpkgs> {}; bashInteractive'
         nix-store --realise --add-root "$cache" "$cache.drv"
     fi
 }
 
-function set_gpu_options() {
+function set_compiler_options() {
     local model="$1"; shift
+    local compiler="$1"; shift
     case "$model" in
         V100)
             GPU_FLAVOR=cuda
-            IDEFIX_CMAKE_OPTIONS+=( -DKokkos_ENABLE_CUDA=ON -DKokkos_ARCH_VOLTA70=ON "-DCUDAToolkit_INCLUDE_DIR=$(in_env_raw 'echo $IDEFIX_CUDA_INCLUDE')" )
+            IDEFIX_CMAKE_OPTIONS+=( -DKokkos_ENABLE_CUDA=ON -DKokkos_ARCH_VOLTA70=ON )
             ;;
         A100)
             GPU_FLAVOR=cuda
-            IDEFIX_CMAKE_OPTIONS+=( -DKokkos_ENABLE_CUDA=ON -DKokkos_ARCH_AMPERE80=ON "-DCUDAToolkit_INCLUDE_DIR=$(in_env_raw 'echo $IDEFIX_CUDA_INCLUDE')" )
+            IDEFIX_CMAKE_OPTIONS+=( -DKokkos_ENABLE_CUDA=ON -DKokkos_ARCH_AMPERE80=ON )
             ;;
         H100)
             GPU_FLAVOR=cuda
-            IDEFIX_CMAKE_OPTIONS+=( -DKokkos_ENABLE_CUDA=ON -DKokkos_ARCH_HOPPER90=ON "-DCUDAToolkit_INCLUDE_DIR=$(in_env_raw 'echo $IDEFIX_CUDA_INCLUDE')" )
+            IDEFIX_CMAKE_OPTIONS+=( -DKokkos_ENABLE_CUDA=ON -DKokkos_ARCH_HOPPER90=ON )
             ;;
         Mi200)
             GPU_FLAVOR=amd
