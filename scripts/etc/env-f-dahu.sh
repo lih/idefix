@@ -3,6 +3,7 @@ function setup_env() {
     set +ue
     source /applis/site/nix.sh >/dev/null 2>&1
     set -ue
+    export INTEL_ONEAPI
 
     local cache=~/.nix-cache/nix-shell-idefix
     if [ ! -e "$cache" ]; then
