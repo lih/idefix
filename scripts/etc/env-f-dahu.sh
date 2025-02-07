@@ -28,7 +28,7 @@ function in_env_raw() {
         nix-instantiate --add-root "$drvfile" "$IDEFIX_DIR/scripts/etc/env-f-dahu-$IDEFIX_COMPILER.nix" >/dev/null
     fi
     printf "Running command: %s\n" "$cmd" >&2
-    NIX_BUILD_SHELL="$HOME/.nix-cache/nix-shell/bin/bash" nix-shell "$drvfile" --run "$prelude; $cmd"
+    NIX_BUILD_SHELL="$HOME/.nix-cache/nix-shell-idefix/bin/bash" nix-shell "$drvfile" --run "$prelude; $cmd"
 }
 function in_env() {
     local -a cmd=( "$@" )
