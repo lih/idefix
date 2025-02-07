@@ -43,7 +43,17 @@ function set_vars() {
     set_compiler_options "$gpu_model" "$compiler"
 }
 
-source scripts/etc/env-$(hostname).sh
+case "$(hostname)" in
+    bigfoot*)
+        HOST=bigfoot;;
+    f-dahu*)
+        HOST=f-dahu;;
+    *)
+        printf "Unhandled host %s\n" >&2
+        exit 1;;
+esac
+
+source scripts/etc/env-$HOST.sh
 
 function show_help() {
     cat <<EOF
