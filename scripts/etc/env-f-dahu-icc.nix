@@ -1,6 +1,6 @@
 let nixpkgs = import <nixpkgs> {};
 
-in nixpkgs.mkShell.override { stdenv = nixpkgs.stdenvNoCC } {
+in nixpkgs.mkShell.override { stdenv = nixpkgs.stdenvNoCC; } {
   buildInputs = with nixpkgs; [
     cmake
     pkg-config
