@@ -3,13 +3,6 @@ function setup_env() {
     set +ue
     source /applis/site/nix.sh >/dev/null 2>&1
     set -ue
-
-    local cache=~/.nix-cache/nix-shell-idefix
-    if [ ! -e "$cache" ]; then
-        mkdir -p ~/.nix-cache
-        nix-instantiate --add-root "$cache.drv" --expr 'with import <nixpkgs> {}; bashInteractive'
-        nix-store --realise --add-root "$cache" "$cache.drv"
-    fi
 }
 
 function set_compiler_options() {
@@ -20,14 +13,12 @@ function set_compiler_options() {
 }
 
 function in_env_raw() {
-    local -a cmd="$1"
-    local drvfile="$IDEFIX_DIR/scripts/etc/env-f-dahu-$IDEFIX_COMPILER.drv"
-    if [ ! -e "$drvfile" ]; then
-        printf "Cacheing an Idefix shell derivation in %s\n" "$drvfile" >&2
-        nix-instantiate --add-root "$drvfile" "$IDEFIX_DIR/scripts/etc/env-f-dahu-$IDEFIX_COMPILER.nix" >/dev/null
+    local cmd="$1"; shift
+    local prelude=":"
+    if [ "$IDEFIX_COMPILER" == icc ]; then
+        prelude="source $INTEL_ONEAPI/setvars.sh"
     fi
-    printf "Running command: %s\n" "$cmd" >&2
-    NIX_BUILD_SHELL="$HOME/.nix-cache/nix-shell/bin/bash" nix-shell "$drvfile" --run "$cmd"
+    bash -c "$prelude; $cmd"
 }
 function in_env() {
     local -a cmd=( "$@" )
