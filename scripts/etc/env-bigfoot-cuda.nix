@@ -12,5 +12,5 @@ in nixpkgs.mkShell.override { stdenv = nixpkgs.stdenvNoCC; } {
     cudatoolkit
   ];
   NIX_SHELL_PROMPT_TAG = "idefix";
-  # IDEFIX_CUDA_INCLUDE = "${nixpkgs.lib.getDev cudatoolkit}/include";
+  CUDA_RUNTIME = "${nixpkgs.linuxPackages.nvidia_x11}";
 }
