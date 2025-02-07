@@ -1,4 +1,4 @@
-let nixpkgs = import ./env-bigfoot-nixpkgs.nix;
+let nixpkgs = import <nixpkgs> {};
 
 in nixpkgs.mkShell.override { stdenv = nixpkgs.stdenvNoCC; } {
   buildInputs = with nixpkgs; [
