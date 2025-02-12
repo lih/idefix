@@ -9,5 +9,6 @@ in nixpkgs.mkShell.override { stdenv = nixpkgs.stdenvNoCC; } {
   INTEL_ONEAPI = builtins.getEnv "INTEL_ONEAPI";
   shellHook = ''
     source "$INTEL_ONEAPI/setvars.sh"
+    export CMAKE_PREFIX_PATH="$INTEL_ONEAPI/mpi/latest/bin/mpiexec"
   '';
 }
