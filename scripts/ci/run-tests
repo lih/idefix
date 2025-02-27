@@ -4,17 +4,23 @@ case "$IDEFIX_COMPILER" in
         source /opt/intel/oneapi/setvars.sh;;
     gricad-*)
         function remote-tests() {
-            printf "Running tests : %s\n" "$*"
             declare -p IDEFIX_COMPILER GITHUB_SHA
             if [ ! -e ".github-ci/$GITHUB_SHA" ]; then
                 mkdir -p ".github-ci/$GITHUB_SHA"
-                cd ".github-ci/$GITHUB_SHA"
-                git init
-                git remote add origin "https://github.com/$GITHUB_REPOSITORY"
-                git fetch origin "$GITHUB_SHA"
-                git reset --hard "$GITHUB_SHA"
-                git submodule update --init
+                (
+                    cd ".github-ci/$GITHUB_SHA"
+                    git init
+                    git remote add origin "https://github.com/$GITHUB_REPOSITORY"
+                    git fetch origin "$GITHUB_SHA"
+                    git reset --hard "$GITHUB_SHA"
+                    git submodule update --init
+                )
             fi
+            cd ".github-ci/$GITHUB_SHA"
+
+            printf "Running tests : %s\n" "$*"
+            cd "$1"
+            ./testme.py "${@:2}"
         }
         function run-tests() {
             local -a args=( "$@" )

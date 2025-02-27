@@ -26,8 +26,8 @@ jobs:
     name: Gricad Jobs
     uses: ./.github/workflows/idefix-ci-jobs.yml
     with:
-      TESTME_OPTIONS: -intel -Werror
-      IDEFIX_COMPILER: gricad-icc
+      TESTME_OPTIONS: -Werror
+      IDEFIX_COMPILER: gricad-gcc
 
   # icc-jobs:
   #   needs: Linter
