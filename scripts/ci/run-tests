@@ -17,7 +17,8 @@ case "$IDEFIX_COMPILER" in
                 )
             fi
             cd ".github-ci/$GITHUB_SHA"
-            export PYTHONPATH="$PWD"
+            export IDEFIX_DIR="$PWD"
+            export PYTHONPATH="$PWD${PYTHONPATH+:}$PYTHONPATH"
             
             printf "Running tests : %s\n" "$*"
             cd "$1"
