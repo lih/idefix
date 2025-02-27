@@ -24,7 +24,7 @@ jobs:
 
   gricad-jobs:
     needs: Linter
-    name: Gricad Jobs (intel OneApi)
+    name: Gricad Jobs
     uses: ./.github/workflows/idefix-ci-jobs.yml
     with:
       TESTME_OPTIONS: -intel -Werror

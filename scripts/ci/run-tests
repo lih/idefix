@@ -8,6 +8,7 @@ case "$IDEFIX_COMPILER" in
         }
         function run-tests() {
             local -a args=( "$@" )
+            printf "Running jobs on remote workflow host\n"
             ssh workflow "$(declare -p args); $(declare -f remote-tests); "'remote-tests "${args[@]}"'
         }
     ;;
