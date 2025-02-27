@@ -13,6 +13,7 @@ case "$IDEFIX_COMPILER" in
                 git remote add origin "https://github.com/$GITHUB_REPOSITORY"
                 git fetch origin "$GITHUB_SHA"
                 git reset --hard "$GITHUB_SHA"
+                git submodule update --init
             fi
         }
         function run-tests() {
