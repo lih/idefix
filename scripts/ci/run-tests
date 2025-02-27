@@ -5,13 +5,15 @@ case "$IDEFIX_COMPILER" in
     gricad-*)
         function remote-tests() {
             printf "Running tests : %s\n" "$*"
+            declare -p IDEFIX_COMPILER GITHUB_SHA
         }
         function run-tests() {
             local -a args=( "$@" )
             printf "Running jobs on remote workflow host\n"
-            ssh workflow "$(declare -p args); $(declare -f remote-tests); "'remote-tests "${args[@]}"'
+            ssh workflow "$(declare -p args IDEFIX_COMPILER GITHUB_SHA); $(declare -f remote-tests); "'remote-tests "${args[@]}"'
         }
     ;;
+
     *)
         function run-tests() {
             cd "$1"
