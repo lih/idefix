@@ -20,6 +20,7 @@ env:
   TESTME_OPTIONS: ${{ inputs.TESTME_OPTIONS }}
   PYTHONPATH: ${{ github.workspace }}
   IDEFIX_DIR: ${{ github.workspace }}
+  GITHUB_REPOSITORY: ${{ github.repository }}
 
 jobs:
   ShocksHydro:
