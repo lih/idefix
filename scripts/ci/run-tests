@@ -17,8 +17,9 @@ case "$IDEFIX_COMPILER" in
         }
         function run-tests() {
             local -a args=( "$@" )
+            local -a vars=( args IDEFIX_COMPILER GITHUB_SHA GITHUB_REPOSITORY )
             printf "Running jobs on remote workflow host\n"
-            ssh workflow "$(declare -p args IDEFIX_COMPILER GITHUB_SHA); $(declare -f remote-tests); "'remote-tests "${args[@]}"'
+            ssh workflow "$(declare -p "${vars[@]}"); $(declare -f remote-tests); "'remote-tests "${args[@]}"'
         }
     ;;
 
