@@ -2,9 +2,11 @@
 case "$IDEFIX_COMPILER" in
     icc)
         source /opt/intel/oneapi/setvars.sh;;
+    
     gricad-*)
         function remote-tests() {
             # Le code de cette fonction s'éxécute sur le worker
+            
             declare -p IDEFIX_COMPILER GITHUB_SHA
 
             if [ ! -e ".github-ci/$GITHUB_SHA" ]; then
@@ -33,6 +35,7 @@ case "$IDEFIX_COMPILER" in
         
         function run-tests() {
             # Le code de cette fonction s'éxécute sur le runner
+            
             local -a args=( "$@" )
             local -a vars=( args IDEFIX_COMPILER GITHUB_SHA GITHUB_REPOSITORY )
 
