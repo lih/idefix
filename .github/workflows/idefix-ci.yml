@@ -23,7 +23,6 @@ jobs:
         if: always()
 
   gricad-jobs:
-    needs: Linter
     name: Gricad Jobs
     uses: ./.github/workflows/idefix-ci-jobs.yml
     with:
