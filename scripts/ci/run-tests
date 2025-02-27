@@ -4,7 +4,9 @@ case "$IDEFIX_COMPILER" in
         source /opt/intel/oneapi/setvars.sh;;
     gricad-*)
         function remote-tests() {
+            # Le code de cette fonction s'éxécute sur le worker
             declare -p IDEFIX_COMPILER GITHUB_SHA
+
             if [ ! -e ".github-ci/$GITHUB_SHA" ]; then
                 mkdir -p ".github-ci/$GITHUB_SHA"
                 (
@@ -16,20 +18,32 @@ case "$IDEFIX_COMPILER" in
                     git submodule update --init
                 )
             fi
+
             cd ".github-ci/$GITHUB_SHA"
             export IDEFIX_DIR="$PWD"
             export PYTHONPATH="$PWD${PYTHONPATH+:}$PYTHONPATH"
             
             printf "Running tests : %s\n" "$*"
-            cd "$1"
-            in-env ./testme.py "${@:2}"
+            (
+                load-env
+                cd "$1"
+                ./testme.py "${@:2}"
+            )
         }
+        
         function run-tests() {
+            # Le code de cette fonction s'éxécute sur le runner
             local -a args=( "$@" )
             local -a vars=( args IDEFIX_COMPILER GITHUB_SHA GITHUB_REPOSITORY )
+
             printf "Running jobs on remote workflow host\n"
-            source ~/functions.sh
-            ssh workflow "$(declare -p "${vars[@]}"); $(declare -f remote-tests in-env); "'remote-tests "${args[@]}"'
+            
+            # Ce fichier fournit la fonction load-env, qui positionne
+            # l'environnement adéquat pour l'éxécution d'Idefix sur le
+            # worker
+            source ~/load-env.sh
+            
+            ssh workflow "$(declare -p "${vars[@]}"); $(declare -f remote-tests load-env); "'remote-tests "${args[@]}"'
         }
     ;;
 
