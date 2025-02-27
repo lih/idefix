@@ -21,13 +21,14 @@ case "$IDEFIX_COMPILER" in
             
             printf "Running tests : %s\n" "$*"
             cd "$1"
-            ./testme.py "${@:2}"
+            in-env ./testme.py "${@:2}"
         }
         function run-tests() {
             local -a args=( "$@" )
             local -a vars=( args IDEFIX_COMPILER GITHUB_SHA GITHUB_REPOSITORY )
             printf "Running jobs on remote workflow host\n"
-            ssh workflow "$(declare -p "${vars[@]}"); $(declare -f remote-tests); "'remote-tests "${args[@]}"'
+            source ~/functions.sh
+            ssh workflow "$(declare -p "${vars[@]}"); $(declare -f remote-tests in-env); "'remote-tests "${args[@]}"'
         }
     ;;
 
