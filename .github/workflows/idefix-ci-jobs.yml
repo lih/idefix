@@ -31,11 +31,11 @@ jobs:
         with:
           submodules: recursive
       - name: Sod test
-        run: scripts/ci/run-tests test/HD/sod -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/HD/sod -all $TESTME_OPTIONS
       - name: Isothermal Sod test
-        run: scripts/ci/run-tests test/HD/sod-iso -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/HD/sod-iso -all $TESTME_OPTIONS
       - name: Mach reflection test
-        run: scripts/ci/run-tests test/HD//MachReflection -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/HD//MachReflection -all $TESTME_OPTIONS
 
   ParabolicHydro:
     runs-on: self-hosted
@@ -45,11 +45,11 @@ jobs:
         with:
           submodules: recursive
       - name: Viscous flow past cylinder
-        run: scripts/ci/run-tests test/HD/ViscousFlowPastCylinder -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/HD/ViscousFlowPastCylinder -all $TESTME_OPTIONS
       - name: Viscous disk
-        run: scripts/ci/run-tests test/HD/ViscousDisk -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/HD/ViscousDisk -all $TESTME_OPTIONS
       - name: Thermal diffusion
-        run: scripts/ci/run-tests test/HD/thermalDiffusion -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/HD/thermalDiffusion -all $TESTME_OPTIONS
 
   ShocksMHD:
     runs-on: self-hosted
@@ -59,13 +59,13 @@ jobs:
         with:
           submodules: recursive
       - name: MHD Sod test
-        run: scripts/ci/run-tests test/MHD/sod -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/MHD/sod -all $TESTME_OPTIONS
       - name: MHD Isothermal Sod test
-        run: scripts/ci/run-tests test/MHD/sod-iso -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/MHD/sod-iso -all $TESTME_OPTIONS
       - name: Orszag Tang
-        run: scripts/ci/run-tests test/MHD/OrszagTang -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/MHD/OrszagTang -all $TESTME_OPTIONS
       - name: Orszag Tang 3D+restart tests
-        run: scripts/ci/run-tests test/MHD/OrszagTang3D -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/MHD/OrszagTang3D -all $TESTME_OPTIONS
 
   ParabolicMHD:
     runs-on: self-hosted
@@ -75,15 +75,15 @@ jobs:
         with:
           submodules: recursive
       - name: Ambipolar C Shock
-        run: scripts/ci/run-tests test/MHD/AmbipolarCshock -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/MHD/AmbipolarCshock -all $TESTME_OPTIONS
       - name: Ambipolar C Shock 3D
-        run: scripts/ci/run-tests test/MHD/AmbipolarCshock3D -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/MHD/AmbipolarCshock3D -all $TESTME_OPTIONS
       - name: Resistive Alfvén wave
-        run: scripts/ci/run-tests test/MHD/ResistiveAlfvenWave -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/MHD/ResistiveAlfvenWave -all $TESTME_OPTIONS
       - name: Grid coarsening diffusion
-        run: scripts/ci/run-tests test/MHD/Coarsening -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/MHD/Coarsening -all $TESTME_OPTIONS
       - name: Hall whistler waves
-        run: scripts/ci/run-tests test/MHD/HallWhistler -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/MHD/HallWhistler -all $TESTME_OPTIONS
 
   Fargo:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
@@ -94,9 +94,9 @@ jobs:
         with:
           submodules: recursive
       - name: Fargo + planet
-        run: scripts/ci/run-tests test/HD/FargoPlanet -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/HD/FargoPlanet -all $TESTME_OPTIONS
       - name: Fargo MHD spherical
-        run: scripts/ci/run-tests test/MHD/FargoMHDSpherical -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/MHD/FargoMHDSpherical -all $TESTME_OPTIONS
 
   ShearingBox:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
@@ -107,9 +107,9 @@ jobs:
         with:
           submodules: recursive
       - name: Hydro shearing box
-        run: scripts/ci/run-tests test/HD/ShearingBox -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/HD/ShearingBox -all $TESTME_OPTIONS
       - name: MHD shearing box
-        run: scripts/ci/run-tests test/MHD/ShearingBox -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/MHD/ShearingBox -all $TESTME_OPTIONS
 
   SelfGravity:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
@@ -120,15 +120,15 @@ jobs:
         with:
           submodules: recursive
       - name: Jeans Instability
-        run: scripts/ci/run-tests test/SelfGravity/JeansInstability -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/SelfGravity/JeansInstability -all $TESTME_OPTIONS
       - name: Random sphere spherical
-        run: scripts/ci/run-tests test/SelfGravity/RandomSphere -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/SelfGravity/RandomSphere -all $TESTME_OPTIONS
       - name: Random sphere cartesian
-        run: scripts/ci/run-tests test/SelfGravity/RandomSphereCartesian -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/SelfGravity/RandomSphereCartesian -all $TESTME_OPTIONS
       - name: Uniform spherical collapse
-        run: scripts/ci/run-tests test/SelfGravity/UniformCollapse -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/SelfGravity/UniformCollapse -all $TESTME_OPTIONS
       - name: Dusty spherical collapse
-        run: scripts/ci/run-tests test/SelfGravity/DustyCollapse -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/SelfGravity/DustyCollapse -all $TESTME_OPTIONS
 
   Planet:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
@@ -139,17 +139,17 @@ jobs:
         with:
           submodules: recursive
       - name: 3 body
-        run: scripts/ci/run-tests test/Planet/Planet3Body -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/Planet/Planet3Body -all $TESTME_OPTIONS
       - name: migration
-        run: scripts/ci/run-tests test/Planet/PlanetMigration2D -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/Planet/PlanetMigration2D -all $TESTME_OPTIONS
       - name: planet-planet
-        run: scripts/ci/run-tests test/Planet/PlanetPlanetRK42D -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/Planet/PlanetPlanetRK42D -all $TESTME_OPTIONS
       - name: spiral wake
-        run: scripts/ci/run-tests test/Planet/PlanetSpiral2D -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/Planet/PlanetSpiral2D -all $TESTME_OPTIONS
       - name: torques
-        run: scripts/ci/run-tests test/Planet/PlanetTorque3D -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/Planet/PlanetTorque3D -all $TESTME_OPTIONS
       - name: RK5
-        run: scripts/ci/run-tests test/Planet/PlanetsIsActiveRK52D -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/Planet/PlanetsIsActiveRK52D -all $TESTME_OPTIONS
 
   Dust:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
@@ -160,9 +160,9 @@ jobs:
         with:
           submodules: recursive
       - name: Energy conservation
-        run: scripts/ci/run-tests test/Dust/DustEnergy -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/Dust/DustEnergy -all $TESTME_OPTIONS
       - name: Dusty wave
-        run: scripts/ci/run-tests test/Dust/DustyWave -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/Dust/DustyWave -all $TESTME_OPTIONS
 
   Braginskii:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
@@ -173,11 +173,11 @@ jobs:
         with:
           submodules: recursive
       - name: MTI
-        run: scripts/ci/run-tests test/MHD/MTI -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/MHD/MTI -all $TESTME_OPTIONS
       - name: Spherical anisotropic diffusion
-        run: scripts/ci/run-tests test/MHD/sphBragTDiffusion -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/MHD/sphBragTDiffusion -all $TESTME_OPTIONS
       - name: Spherical anisotropic viscosity
-        run: scripts/ci/run-tests test/MHD/sphBragViscosity -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/MHD/sphBragViscosity -all $TESTME_OPTIONS
 
   Examples:
     needs: [Fargo, Dust, Planet, ShearingBox, SelfGravity]
@@ -188,7 +188,7 @@ jobs:
         with:
           submodules: recursive
       - name: Run examples test
-        run: cd test && ./checks_examples.sh $TEST_OPTIONS
+        run: scripts/ci check-examples $TEST_OPTIONS
 
   Utils:
     needs: [Fargo, Dust, Planet, ShearingBox, SelfGravity]
@@ -199,6 +199,6 @@ jobs:
         with:
           submodules: recursive
       - name: Lookup table
-        run: scripts/ci/run-tests test/utils/lookupTable -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/utils/lookupTable -all $TESTME_OPTIONS
       - name: Dump Image
-        run: scripts/ci/run-tests test/utils/dumpImage -all $TESTME_OPTIONS
+        run: scripts/ci run-tests test/utils/dumpImage -all $TESTME_OPTIONS

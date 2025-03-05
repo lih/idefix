@@ -28,8 +28,7 @@ case "$IDEFIX_COMPILER" in
             printf "Running tests : %s\n" "$*"
             (
                 load-env
-                cd "$1"
-                ./testme.py "${@:2}"
+                run-command
             )
         }
         
@@ -46,17 +45,31 @@ case "$IDEFIX_COMPILER" in
             # worker
             source ~/load-env.sh
             
-            ssh workflow "$(declare -p "${vars[@]}"); $(declare -f remote-tests load-env); "'remote-tests "${args[@]}"'
+            ssh workflow "$(declare -p "${vars[@]}"); $(declare -f remote-tests load-env run-command); "'remote-tests "${args[@]}"'
         }
     ;;
 
     *)
         function run-tests() {
-            cd "$1"
-            ./testme.py "${@:2}"
+            run-command "$@"
         }
         ;;
 esac
 
 set -ue
+action="$1"; shift
+case "$action" in
+    run-tests)
+        function run-command() {
+            cd "$1"
+            ./testme.py "${@:2}"
+        }
+        ;;
+    check-examples)
+        function run-command() {
+            cd test && ./check_examples.sh "$@"
+        }
+        ;;
+esac
+
 run-tests "$@"
