@@ -28,7 +28,7 @@ case "$IDEFIX_COMPILER" in
             printf "Running tests : %s\n" "$*"
             (
                 load-env
-                run-command
+                run-command "$@"
             )
         }
         
