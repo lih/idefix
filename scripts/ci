@@ -67,7 +67,7 @@ case "$action" in
         ;;
     check-examples)
         function run-command() {
-            cd test && ./check_examples.sh "$@"
+            cd test && ./checks_examples.sh "$@"
         }
         ;;
 esac
