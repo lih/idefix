@@ -28,6 +28,7 @@ jobs:
     with:
       TESTME_OPTIONS: -Werror
       IDEFIX_COMPILER: gricad-gcc
+      IDEFIX_RUNNER: self-hosted
 
   # icc-jobs:
   #   needs: Linter

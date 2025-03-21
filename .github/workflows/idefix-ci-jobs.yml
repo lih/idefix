@@ -7,6 +7,9 @@ on:
       IDEFIX_COMPILER:
         required: true
         type: string
+      IDEFIX_RUNNER:
+        required: true
+        type: string
 
 # concurrency:
 #   # auto-cancel any concurrent job *in the same context*
@@ -24,7 +27,7 @@ env:
 
 jobs:
   ShocksHydro:
-    runs-on: self-hosted
+    runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
@@ -38,7 +41,7 @@ jobs:
         run: scripts/ci run-tests test/HD//MachReflection -all $TESTME_OPTIONS
 
   ParabolicHydro:
-    runs-on: self-hosted
+    runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
@@ -52,7 +55,7 @@ jobs:
         run: scripts/ci run-tests test/HD/thermalDiffusion -all $TESTME_OPTIONS
 
   ShocksMHD:
-    runs-on: self-hosted
+    runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
@@ -68,7 +71,7 @@ jobs:
         run: scripts/ci run-tests test/MHD/OrszagTang3D -all $TESTME_OPTIONS
 
   ParabolicMHD:
-    runs-on: self-hosted
+    runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
@@ -87,7 +90,7 @@ jobs:
 
   Fargo:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
-    runs-on: self-hosted
+    runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
@@ -100,7 +103,7 @@ jobs:
 
   ShearingBox:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
-    runs-on: self-hosted
+    runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
@@ -113,7 +116,7 @@ jobs:
 
   SelfGravity:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
-    runs-on: self-hosted
+    runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
@@ -132,7 +135,7 @@ jobs:
 
   Planet:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
-    runs-on: self-hosted
+    runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
@@ -153,7 +156,7 @@ jobs:
 
   Dust:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
-    runs-on: self-hosted
+    runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
@@ -166,7 +169,7 @@ jobs:
 
   Braginskii:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
-    runs-on: self-hosted
+    runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
@@ -181,7 +184,7 @@ jobs:
 
   Examples:
     needs: [Fargo, Dust, Planet, ShearingBox, SelfGravity]
-    runs-on: self-hosted
+    runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
@@ -192,7 +195,7 @@ jobs:
 
   Utils:
     needs: [Fargo, Dust, Planet, ShearingBox, SelfGravity]
-    runs-on: self-hosted
+    runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
