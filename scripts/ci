@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+printf "Running command : %s\n" "$*"
