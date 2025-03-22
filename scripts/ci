@@ -23,5 +23,9 @@ vars=( GITHUB_REPOSITORY GITHUB_SHA IDEFIX_COMPILER )
 cmd=( "$@" )
 
 ssh "$IDEFIX_COMPILER-worker" \
-    bash -c \
-    "$(declare -f remote-command); $(declare -p "${vars[@]}"); $(declare -p cmd); remote-command \"\${cmd[@]}\""
+    bash -s <<EOF
+$(declare -p "${vars[@]}")
+$(declare -f remote-command)
+$(declare -p cmd)
+remote-command \"\${cmd[@]}\"
+EOF
