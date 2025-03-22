@@ -1,3 +1,27 @@
 #!/usr/bin/env bash
 declare -p GITHUB_REPOSITORY GITHUB_SHA
-printf "Running command : %s\n" "$*"
+
+function remote-command() {
+    local local_checkout="$PWD/.github-runner/$GITHUB_SHA"
+    if [ ! -e "$local_checkout" ]; then
+        (
+            mkdir -p "$local_checkout"
+            cd "$local_checkout"
+            git init
+            git remote add origin "https://github.com/$GITHUB_REPOSITORY"
+            git fetch origin "$GITHUB_SHA"
+            git reset --hard "$GITHUB_SHA"
+            git submodule update --quiet --init --depth=1
+        )
+    fi
+    cd "$local_checkout"
+    export IDEFIX_DIR="$PWD"
+    printf "Running command in %s : %s\n" "$IDEFIX_DIR" "$*"
+}
+
+vars=( GITHUB_REPOSITORY GITHUB_SHA IDEFIX_COMPILER )
+cmd=( "$@" )
+
+ssh "$IDEFIX_COMPILER-worker" \
+    bash -c \
+    "$(declare -f remote-command); $(declare -p "${vars[@]}"); $(declare -p cmd); remote-command \"\${cmd[@]}\""
