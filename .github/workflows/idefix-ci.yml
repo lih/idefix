@@ -21,16 +21,8 @@ jobs:
       - uses: pre-commit-ci/lite-action@v1.0.0
         if: always()
 
-  worker-checkout:
-    runs-on: shallow
-    steps:
-      - name: Check out repository on worker
-        run: scripts/ci worker-checkout
-
   gcc-jobs:
-    needs:
-      - Linter
-      - worker-checkout
+    needs: Linter
     name: CPU Jobs (gcc)
     uses: ./.github/workflows/idefix-ci-jobs.yml
     with:

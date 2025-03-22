@@ -25,13 +25,16 @@ env:
   IDEFIX_DIR: ${{ github.workspace }}
 
 jobs:
-  ShocksHydro:
+  worker-checkout:
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
       - name: Check out repo
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
+        run: scripts/ci worker-checkout
+  
+  ShocksHydro:
+    needs: worker-checkout
+    runs-on: ${{ inputs.IDEFIX_RUNNER }}
+    steps:
       - name: Sod test
         run: scripts/ci run-tests test/HD/sod -all $TESTME_OPTIONS
       - name: Isothermal Sod test
@@ -40,12 +43,9 @@ jobs:
         run: scripts/ci run-tests test/HD//MachReflection -all $TESTME_OPTIONS
 
   ParabolicHydro:
+    needs: worker-checkout
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
       - name: Viscous flow past cylinder
         run: scripts/ci run-tests test/HD/ViscousFlowPastCylinder -all $TESTME_OPTIONS
       - name: Viscous disk
@@ -54,12 +54,9 @@ jobs:
         run: scripts/ci run-tests test/HD/thermalDiffusion -all $TESTME_OPTIONS
 
   ShocksMHD:
+    needs: worker-checkout
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
       - name: MHD Sod test
         run: scripts/ci run-tests test/MHD/sod -all $TESTME_OPTIONS
       - name: MHD Isothermal Sod test
@@ -70,12 +67,9 @@ jobs:
         run: scripts/ci run-tests test/MHD/OrszagTang3D -all $TESTME_OPTIONS
 
   ParabolicMHD:
+    needs: worker-checkout
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
       - name: Ambipolar C Shock
         run: scripts/ci run-tests test/MHD/AmbipolarCshock -all $TESTME_OPTIONS
       - name: Ambipolar C Shock 3D
@@ -91,10 +85,6 @@ jobs:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
       - name: Fargo + planet
         run: scripts/ci run-tests test/HD/FargoPlanet -all $TESTME_OPTIONS
       - name: Fargo MHD spherical
@@ -104,10 +94,6 @@ jobs:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
       - name: Hydro shearing box
         run: scripts/ci run-tests test/HD/ShearingBox -all $TESTME_OPTIONS
       - name: MHD shearing box
@@ -117,10 +103,6 @@ jobs:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
       - name: Jeans Instability
         run: scripts/ci run-tests test/SelfGravity/JeansInstability -all $TESTME_OPTIONS
       - name: Random sphere spherical
@@ -136,10 +118,6 @@ jobs:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
       - name: 3 body
         run: scripts/ci run-tests test/Planet/Planet3Body -all $TESTME_OPTIONS
       - name: migration
@@ -157,10 +135,6 @@ jobs:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
       - name: Energy conservation
         run: scripts/ci run-tests test/Dust/DustEnergy -all $TESTME_OPTIONS
       - name: Dusty wave
@@ -170,10 +144,6 @@ jobs:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
       - name: MTI
         run: scripts/ci run-tests test/MHD/MTI -all $TESTME_OPTIONS
       - name: Spherical anisotropic diffusion
@@ -185,10 +155,6 @@ jobs:
     needs: [Fargo, Dust, Planet, ShearingBox, SelfGravity]
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
       - name: Run examples test
         run: scripts/ci check-examples $TEST_OPTIONS
 
@@ -196,10 +162,6 @@ jobs:
     needs: [Fargo, Dust, Planet, ShearingBox, SelfGravity]
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
-      - name: Check out repo
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
       - name: Lookup table
         run: scripts/ci run-tests test/utils/lookupTable -all $TESTME_OPTIONS
       - name: Dump Image
