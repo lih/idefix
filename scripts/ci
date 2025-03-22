@@ -1,26 +1,36 @@
 #!/usr/bin/env bash
 declare -p GITHUB_REPOSITORY GITHUB_SHA
 
-function remote-command() {
-    local local_checkout="$PWD/.github-runner/$GITHUB_SHA"
-    if [ ! -e "$local_checkout" ]; then
-        (
-            mkdir -p "$local_checkout"
+case "$1" in
+    worker-checkout)
+        vars=( GITHUB_REPOSITORY GITHUB_SHA )
+        function remote-command() {
+            local local_checkout="$PWD/.github-runner/$GITHUB_SHA"
+            if [ ! -e "$local_checkout" ]; then
+                (
+                    mkdir -p "$local_checkout"
+                    cd "$local_checkout"
+                    git init
+                    git remote add origin "https://github.com/$GITHUB_REPOSITORY"
+                    git fetch origin "$GITHUB_SHA"
+                    git reset --hard "$GITHUB_SHA"
+                    git submodule update --quiet --init --depth=1
+                )
+            fi
+        }
+        ;;
+    *)
+        vars=( GITHUB_SHA IDEFIX_COMPILER )
+        function remote-command() {
+            local local_checkout="$PWD/.github-runner/$GITHUB_SHA"
             cd "$local_checkout"
-            git init
-            git remote add origin "https://github.com/$GITHUB_REPOSITORY"
-            git fetch origin "$GITHUB_SHA"
-            git reset --hard "$GITHUB_SHA"
-            git submodule update --quiet --init --depth=1
-        )
-    fi
-    cd "$local_checkout"
-    export IDEFIX_DIR="$PWD"
-    printf "Running command in %s : %s\n" "$IDEFIX_DIR" "$*"
-}
+            export IDEFIX_DIR="$PWD"
+            printf "Running command in %s : %s\n" "$IDEFIX_DIR" "$*"
+        }
+        ;;
+esac
 
-vars=( GITHUB_REPOSITORY GITHUB_SHA IDEFIX_COMPILER )
-cmd=( "$@" )
+cmd=( "${@:2}" )
 
 ssh "$IDEFIX_COMPILER-worker" \
     bash -s <<EOF
