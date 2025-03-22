@@ -22,6 +22,7 @@ jobs:
         if: always()
 
   gcc-jobs:
+    needs: Linter
     name: CPU Jobs (gcc)
     uses: ./.github/workflows/idefix-ci-jobs.yml
     with:
