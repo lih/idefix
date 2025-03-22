@@ -30,7 +30,7 @@ jobs:
     steps:
       - name: Check out repo
         run: scripts/ci worker-checkout
-  
+
   ShocksHydro:
     needs: worker-checkout
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
