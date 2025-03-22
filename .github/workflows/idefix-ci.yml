@@ -11,8 +11,6 @@ on:
 
 jobs:
   Linter:
-    # Don't do this in forks
-    if: ${{ github.repository == 'idefix-code/idefix' || github.repository == 'glesur/idefix' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -24,7 +22,6 @@ jobs:
         if: always()
 
   gcc-jobs:
-    needs: Linter
     name: CPU Jobs (gcc)
     uses: ./.github/workflows/idefix-ci-jobs.yml
     with:
