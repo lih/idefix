@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
+declare -p GITHUB_REPOSITORY GITHUB_SHA
 printf "Running command : %s\n" "$*"
