@@ -22,6 +22,7 @@ jobs:
         if: always()
 
   worker-checkout:
+    runs-on: shallow
     steps:
       - name: Check out repository on worker
         run: scripts/ci worker-checkout
