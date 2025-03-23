@@ -28,6 +28,7 @@ jobs:
   worker-checkout:
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
+      - uses: actions/checkout@v4
       - name: Check out repo
         run: scripts/ci worker-checkout
 
@@ -35,6 +36,7 @@ jobs:
     needs: worker-checkout
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
+      - uses: actions/checkout@v4
       - name: Sod test
         run: scripts/ci run-tests test/HD/sod -all $TESTME_OPTIONS
       - name: Isothermal Sod test
@@ -46,6 +48,7 @@ jobs:
     needs: worker-checkout
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
+      - uses: actions/checkout@v4
       - name: Viscous flow past cylinder
         run: scripts/ci run-tests test/HD/ViscousFlowPastCylinder -all $TESTME_OPTIONS
       - name: Viscous disk
@@ -57,6 +60,7 @@ jobs:
     needs: worker-checkout
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
+      - uses: actions/checkout@v4
       - name: MHD Sod test
         run: scripts/ci run-tests test/MHD/sod -all $TESTME_OPTIONS
       - name: MHD Isothermal Sod test
@@ -70,6 +74,7 @@ jobs:
     needs: worker-checkout
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
+      - uses: actions/checkout@v4
       - name: Ambipolar C Shock
         run: scripts/ci run-tests test/MHD/AmbipolarCshock -all $TESTME_OPTIONS
       - name: Ambipolar C Shock 3D
@@ -85,6 +90,7 @@ jobs:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
+      - uses: actions/checkout@v4
       - name: Fargo + planet
         run: scripts/ci run-tests test/HD/FargoPlanet -all $TESTME_OPTIONS
       - name: Fargo MHD spherical
@@ -94,6 +100,7 @@ jobs:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
+      - uses: actions/checkout@v4
       - name: Hydro shearing box
         run: scripts/ci run-tests test/HD/ShearingBox -all $TESTME_OPTIONS
       - name: MHD shearing box
@@ -103,6 +110,7 @@ jobs:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
+      - uses: actions/checkout@v4
       - name: Jeans Instability
         run: scripts/ci run-tests test/SelfGravity/JeansInstability -all $TESTME_OPTIONS
       - name: Random sphere spherical
@@ -118,6 +126,7 @@ jobs:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
+      - uses: actions/checkout@v4
       - name: 3 body
         run: scripts/ci run-tests test/Planet/Planet3Body -all $TESTME_OPTIONS
       - name: migration
@@ -135,6 +144,7 @@ jobs:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
+      - uses: actions/checkout@v4
       - name: Energy conservation
         run: scripts/ci run-tests test/Dust/DustEnergy -all $TESTME_OPTIONS
       - name: Dusty wave
@@ -144,6 +154,7 @@ jobs:
     needs: [ShocksHydro, ParabolicHydro, ShocksMHD, ParabolicMHD]
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
+      - uses: actions/checkout@v4
       - name: MTI
         run: scripts/ci run-tests test/MHD/MTI -all $TESTME_OPTIONS
       - name: Spherical anisotropic diffusion
@@ -155,6 +166,7 @@ jobs:
     needs: [Fargo, Dust, Planet, ShearingBox, SelfGravity]
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
+      - uses: actions/checkout@v4
       - name: Run examples test
         run: scripts/ci check-examples $TEST_OPTIONS
 
@@ -162,6 +174,7 @@ jobs:
     needs: [Fargo, Dust, Planet, ShearingBox, SelfGravity]
     runs-on: ${{ inputs.IDEFIX_RUNNER }}
     steps:
+      - uses: actions/checkout@v4
       - name: Lookup table
         run: scripts/ci run-tests test/utils/lookupTable -all $TESTME_OPTIONS
       - name: Dump Image
