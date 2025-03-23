@@ -27,6 +27,7 @@ case "$action" in
             cd "$local_checkout"
             export IDEFIX_DIR="$PWD"
             printf "Running command in %s : %s\n" "$IDEFIX_DIR" "$*"
+            in-env echo OK
         }
         ;;
     *)
@@ -43,7 +44,7 @@ source "$HOME/env/$IDEFIX_COMPILER.sh"
 ssh "$IDEFIX_COMPILER-worker" \
     bash -s <<EOF
 $(declare -p "${vars[@]}")
-$(declare -f remote-command in-env)
+$(declare -f remote-command export-env in-env)
 $(declare -p args)
 $(export-env)
 remote-command \"\${args[@]}\"
