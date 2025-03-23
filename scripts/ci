@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 declare -p GITHUB_REPOSITORY GITHUB_SHA
 
-case "$1" in
+action="$1"; shift
+case "$action" in
     worker-checkout)
         vars=( GITHUB_REPOSITORY GITHUB_SHA )
         function remote-command() {
@@ -36,14 +37,14 @@ case "$1" in
         ;;
 esac
 
-cmd=( "${@:2}" )
+args=( "$@" )
 
 source "env/$IDEFIX_COMPILER.sh"
 ssh "$IDEFIX_COMPILER-worker" \
     bash -s <<EOF
 $(declare -p "${vars[@]}")
 $(declare -f remote-command in-env)
-$(declare -p cmd)
+$(declare -p args)
 $(export-env)
-remote-command \"\${cmd[@]}\"
+remote-command \"\${args[@]}\"
 EOF
