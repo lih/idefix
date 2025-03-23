@@ -39,7 +39,7 @@ esac
 
 args=( "$@" )
 
-source "env/$IDEFIX_COMPILER.sh"
+source "$HOME/env/$IDEFIX_COMPILER.sh"
 ssh "$IDEFIX_COMPILER-worker" \
     bash -s <<EOF
 $(declare -p "${vars[@]}")
