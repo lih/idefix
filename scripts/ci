@@ -19,8 +19,8 @@ case "$1" in
             fi
         }
         ;;
-    *)
-        vars=( GITHUB_SHA IDEFIX_COMPILER )
+    run-tests)
+        vars=( GITHUB_SHA IDEFIX_COMPILER  )
         function remote-command() {
             local local_checkout="$PWD/.github-runner/$GITHUB_SHA"
             cd "$local_checkout"
@@ -28,14 +28,22 @@ case "$1" in
             printf "Running command in %s : %s\n" "$IDEFIX_DIR" "$*"
         }
         ;;
+    *)
+        vars=( )
+        function remote-command() {
+            :
+        }
+        ;;
 esac
 
 cmd=( "${@:2}" )
 
+source "env/$IDEFIX_COMPILER.sh"
 ssh "$IDEFIX_COMPILER-worker" \
     bash -s <<EOF
 $(declare -p "${vars[@]}")
-$(declare -f remote-command)
+$(declare -f remote-command in-env)
 $(declare -p cmd)
+$(export-env)
 remote-command \"\${cmd[@]}\"
 EOF
