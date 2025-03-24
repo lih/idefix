@@ -18,12 +18,8 @@ case "$action" in
                     git submodule update --quiet --init --depth=1
                 )
             fi
-            printf "Installing required Python packages for 'testme' scripts"
-            python -m venv "$local_checkout/pyenv"
-            (
-                source "$local_checkout/pyenv/bin/activate"
-                pip install numpy matplotlib
-            )
+            cd "$local_checkout"
+            setup-env
         }
         ;;
     run-tests)
@@ -36,6 +32,7 @@ case "$action" in
 
             cd "$1"
             printf "Running command in %s : %s\n" "$PWD" "./testme.py ${*:2}"
+            setup-env
             in-env ./testme.py "${@:2}"
         }
         ;;
@@ -53,7 +50,7 @@ source "$HOME/env/$IDEFIX_COMPILER.sh"
 ssh "$IDEFIX_COMPILER-worker" \
     bash -s <<EOF
 $(declare -p "${vars[@]}")
-$(declare -f remote-command export-env in-env)
+$(declare -f remote-command export-env in-env setup-env)
 $(declare -p IDEFIX_CI_ARGUMENTS)
 $(export-env)
 remote-command "\${IDEFIX_CI_ARGUMENTS[@]}"
