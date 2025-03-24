@@ -40,14 +40,14 @@ case "$action" in
         ;;
 esac
 
-args=( "$@" )
+IDEFIX_CI_ARGUMENTS=( "$@" )
 
 source "$HOME/env/$IDEFIX_COMPILER.sh"
 ssh "$IDEFIX_COMPILER-worker" \
     bash -s <<EOF
 $(declare -p "${vars[@]}")
 $(declare -f remote-command export-env in-env)
-$(declare -p args)
+$(declare -p IDEFIX_CI_ARGUMENTS)
 $(export-env)
-remote-command \"\${args[@]}\"
+remote-command \"\${IDEFIX_CI_ARGUMENTS[@]}\"
 EOF
