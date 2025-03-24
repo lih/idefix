@@ -49,5 +49,5 @@ $(declare -p "${vars[@]}")
 $(declare -f remote-command export-env in-env)
 $(declare -p IDEFIX_CI_ARGUMENTS)
 $(export-env)
-remote-command \"\${IDEFIX_CI_ARGUMENTS[@]}\"
+remote-command "\${IDEFIX_CI_ARGUMENTS[@]}"
 EOF
