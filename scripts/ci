@@ -27,7 +27,7 @@ case "$action" in
             cd "$local_checkout"
             export IDEFIX_DIR="$PWD"
             printf "Running command in %s : %s\n" "$IDEFIX_DIR" "$*"
-            ls
+            printf "Entering directory %s from %s\n" "$1" "$PWD"
             cd "$1"
             in-env declare -p LD_LIBRARY_PATH PWD
         }
