@@ -19,6 +19,7 @@ case "$action" in
                 )
             fi
             cd "$local_checkout"
+            export IDEFIX_DIR="$PWD"
             setup-env
         }
         ;;
