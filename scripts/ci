@@ -33,7 +33,7 @@ case "$action" in
             cd "$local_checkout"
             export IDEFIX_DIR="$PWD"
             export PYTHONPATH="$PWD"
-            
+
             cd "$1"
             printf "Running command in %s : %s\n" "$PWD" "./testme.py ${*:2}"
             in-env ./testme.py "${@:2}"
