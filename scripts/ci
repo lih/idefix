@@ -34,7 +34,7 @@ case "$action" in
             cd "$1"
             printf "Running command in %s : %s\n" "$PWD" "./testme.py ${*:2}"
             setup-env
-            in-env ompi_info
+            in-env ./testme.py "${@:2}"
         }
         ;;
     *)
