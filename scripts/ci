@@ -37,6 +37,22 @@ case "$action" in
             in-env ./testme.py "${@:2}"
         }
         ;;
+
+    check-examples)
+        vars=( GITHUB_SHA IDEFIX_COMPILER  )
+        function remote-command() {
+            local local_checkout="$PWD/.github-runner/$IDEFIX_COMPILER/$GITHUB_SHA"
+            cd "$local_checkout"
+            export IDEFIX_DIR="$PWD"
+            export PYTHONPATH="$PWD"
+
+            cd "test"
+            printf "Running command in %s : %s\n" "$PWD" "./checks_examples.sh ${*:2}"
+            setup-env
+            in-env ./checks_examples.sh "${@:2}"
+        }
+        ;;
+
     *)
         vars=( )
         function remote-command() {
