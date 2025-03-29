@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-declare -p GITHUB_REPOSITORY GITHUB_SHA
+declare -p GITHUB_REPOSITORY GITHUB_SHA IDEFIX_RUNNER_BASE
 
 action="$1"; shift
 case "$action" in
@@ -63,7 +63,7 @@ esac
 
 IDEFIX_CI_ARGUMENTS=( "$@" )
 
-source "$HOME/env/$IDEFIX_COMPILER.sh"
+source "$IDEFIX_RUNNER_BASE/env/$IDEFIX_COMPILER.sh"
 ssh "$IDEFIX_COMPILER-worker" \
     bash -s <<EOF
 $(declare -p "${vars[@]}")
