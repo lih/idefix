@@ -41,25 +41,18 @@ jobs:
 
   cuda-jobs:
     needs: Linter
-    name: CUDA Jobs
+    name: GPU Jobs (CUDA)
     uses: ./.github/workflows/idefix-ci-jobs.yml
     with:
       TESTME_OPTIONS: -cuda -Werror
       IDEFIX_COMPILER: cuda
       IDEFIX_RUNNER: shallow
 
-  # icc-jobs:
-  #   needs: Linter
-  #   name: CPU Jobs (intel OneApi)
-  #   uses: ./.github/workflows/idefix-ci-jobs.yml
-  #   with:
-  #     TESTME_OPTIONS: -intel -Werror
-  #     IDEFIX_COMPILER: icc
-
-  # cuda-jobs:
-  #   needs: Linter
-  #   name: CUDA Jobs
-  #   uses: ./.github/workflows/idefix-ci-jobs.yml
-  #   with:
-  #     TESTME_OPTIONS: -cuda -Werror
-  #     IDEFIX_COMPILER: nvcc
+  hip-jobs:
+    needs: Linter
+    name: GPU Jobs (AMD)
+    uses: ./.github/workflows/idefix-ci-jobs.yml
+    with:
+      TESTME_OPTIONS: -hip -Werror
+      IDEFIX_COMPILER: hip
+      IDEFIX_RUNNER: shallow
